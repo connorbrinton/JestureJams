@@ -14,8 +14,6 @@ public class LeapSensor extends Listener {
 	@Override
 	public void onInit(Controller controller) {
 		System.out.println("Initialized");
-		System.out.println("Current screen resolution: " + SCREEN_X + "x"
-				+ SCREEN_Y);
 	}
 
 	@Override
