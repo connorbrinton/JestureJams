@@ -1,7 +1,5 @@
 package com.c2.leap;
-
-import com.leapmotion.leap.Controller;
-import com.leapmotion.leap.Frame;
+import com.leapmotion.leap.*;
 
 public class LeapSensor extends Listener {
 
