@@ -4,9 +4,13 @@ import com.leapmotion.leap.*;
 public class LeapSensor extends Listener {
 
 	private LeapParameterListener listener;
+	public Controller controller;
 
 	public void start() {
-		// listener.onLeapParametersChanged(newParameters);
+		controller = new Controller();
+		
+		// Have the sample listener receive events from the controller
+		controller.addListener(this);
 	}
 
 	@Override
@@ -34,6 +38,10 @@ public class LeapSensor extends Listener {
 	public void onFrame(Controller controller) {
 		// Get the most recent frame and report some basic information
 		Frame frame = controller.frame();
+		
+		System.out.println("Frame Received");
+		
+	//	listener.onLeapParametersChanged();
 	}
 
 	public void addListener(LeapParameterListener lpl) {
