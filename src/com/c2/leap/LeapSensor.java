@@ -5,9 +5,12 @@ public class LeapSensor extends Listener {
 
 	private LeapParameterListener listener;
 	public Controller controller;
+	private LeapParameters parameters;
 
 	public void start() {
 		controller = new Controller();
+		
+		
 		
 		// Have the sample listener receive events from the controller
 		controller.addListener(this);
@@ -57,7 +60,9 @@ public class LeapSensor extends Listener {
 		
 		System.out.println("Frame Received");
 		
-		listener.onLeapParametersChanged(null);
+		parameters.update(handPosition, fingerCount, handSize);
+		
+		listener.onLeapParametersChanged(parameters);
 	}
 
 	public void addListener(LeapParameterListener lpl) {
