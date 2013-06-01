@@ -2,18 +2,12 @@ package com.c2.sound;
 
 import java.io.IOException;
 
-import org.apache.commons.exec.CommandLine;
-import org.apache.commons.exec.DefaultExecuteResultHandler;
-import org.apache.commons.exec.DefaultExecutor;
-import org.apache.commons.exec.ExecuteException;
-import org.apache.commons.exec.ExecuteResultHandler;
 import org.apache.commons.exec.ExecuteWatchdog;
 import org.apache.commons.exec.Executor;
 
 import com.c2.leap.LeapParameterListener;
 import com.c2.leap.LeapParameters;
 
-import de.sciss.jcollider.JCollider;
 import de.sciss.jcollider.Server;
 
 public class SoundGenerator implements LeapParameterListener {
