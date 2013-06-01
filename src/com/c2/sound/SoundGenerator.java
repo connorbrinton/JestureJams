@@ -7,13 +7,13 @@ public class SoundGenerator implements LeapParameterListener {
 
 	public void start() {
 		// TODO Auto-generated method stub
-		
-	}
-	
+		}
+
+	// LeapSensor runs this method every frame. Will eventually only run when parameters are changed.
 	@Override
 	public void onLeapParametersChanged(LeapParameters newParameters) {
 		// TODO Auto-generated method stub
-
+		System.out.println(newParameters);
 	}
 
 }
