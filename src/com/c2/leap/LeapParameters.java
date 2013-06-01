@@ -4,9 +4,13 @@ import com.leapmotion.leap.Vector;
 
 public class LeapParameters {
 	
-	private Vector handPosition;
-	private int fingerCount;
-	private double handSize;
+	public Vector handPosition;
+	public int fingerCount;
+	public double handSize;
+	public Vector handVelocity;
+	public double pitch;
+	public double yaw;
+	public double roll;
 	
 	public String toString() {
 		String visualParameters = "[";
@@ -23,22 +27,14 @@ public class LeapParameters {
 		return visualParameters;
 	}
 	
-	public Vector getHandPosition() {
-		return handPosition;
-	}
-	
-	public int getFingerCount() {
-		return fingerCount;
-	}
-	
-	public double getHandSize() {
-		return handSize;
-	}
-	
-	public void update(Vector position, int fingers, double size) {
+	public void update(Vector position, int fingers, double size, Vector velocity, double inputPitch, double inputYaw, double inputRoll) {
 		handPosition = position;
 		fingerCount = fingers;
 		handSize = size;
+		handVelocity = velocity;
+		pitch = inputPitch;
+		yaw = inputYaw;
+		roll = inputRoll;
 	}
 
 }

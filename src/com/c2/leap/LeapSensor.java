@@ -58,10 +58,17 @@ public class LeapSensor extends Listener {
 		// Vector representing hand velocity.
 		Vector velocity = hands.rightmost().palmVelocity();
 
+		// Calculate Pitch, Yaw, and Roll
+		Vector normal = hands.rightmost().palmNormal();
+		double pitch = Math.sin(normal.pitch());
+		double yaw = Math.sin(normal.yaw());
+		double roll = Math.sin(normal.roll());
+		
+		
 		System.out.println("Frame Received");
 		
 		// Modify update method to include whatever parameters are desired. 
-		parameters.update(sphereCenter, fingerCount, handSize);
+		parameters.update(sphereCenter, fingerCount, handSize, velocity, pitch, yaw, roll);
 		
 		listener.onLeapParametersChanged(parameters);
 	}
