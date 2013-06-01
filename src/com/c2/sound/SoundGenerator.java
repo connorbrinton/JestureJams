@@ -1,69 +1,60 @@
 package com.c2.sound;
 
-import java.io.IOException;
-
-import org.apache.commons.exec.ExecuteWatchdog;
-import org.apache.commons.exec.Executor;
+import org.jfugue.MusicStringParser;
+import org.jfugue.Note;
 
 import com.c2.leap.LeapParameterListener;
 import com.c2.leap.LeapParameters;
-
-import de.sciss.jcollider.Server;
+import com.jsyn.JSyn;
+import com.jsyn.Synthesizer;
+import com.jsyn.unitgen.FilterLowPass;
+import com.jsyn.unitgen.LineOut;
+import com.jsyn.unitgen.SawtoothOscillator;
+import com.jsyn.unitgen.UnitOscillator;
 
 public class SoundGenerator implements LeapParameterListener {
 	
-	Server server;
+	private static final double HUMAN_LOW = 20.0;
+	private static final double HUMAN_HIGH = 20000.0;
+	private static final double C7_FREQ = getFrequency("C7");
+
+	Synthesizer synth;
 	boolean receivingParameters = false;
+	
+	UnitOscillator osc;
 
 	public void start() {
-/*		// Start the SuperCollider server
-		CommandLine scCommand = new CommandLine("scsynth");
-		scCommand.addArgument("-t").addArgument("57110");
-		ExecuteResultHandler erh = new DefaultExecuteResultHandler();
-		Executor executor = new DefaultExecutor();
-		// Prepare to kill it when the program exits
-		killOnShutdown(executor);
-		// Actually start it
-		try {
-			executor.execute(scCommand, erh);
-		} catch (ExecuteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		try {
-			Thread.sleep(1000);
-			onLeapParametersChanged(null);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
-		try {
-			server = new Server("SoundGenerator");
-			server.start();
-			server.boot();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		synth = JSyn.createSynthesizer();
+		synth.start();
+		// Set up the graph
+		setUpGraph(synth);
 	}
 	
-	private void killOnShutdown(final Executor executor) {
-		ExecuteWatchdog watchdog = new ExecuteWatchdog(ExecuteWatchdog.INFINITE_TIMEOUT);
-		executor.setWatchdog(watchdog);
-		Runtime.getRuntime().addShutdownHook(new Thread() {
-			@Override
-			public void run() {
-				executor.getWatchdog().destroyProcess();
-			}
-		});
+	public void setUpGraph(Synthesizer synth) {
+		// Graph terminal
+		LineOut lo = new LineOut();
+		synth.add(lo);
+
+		// Initialization
+		osc = new SawtoothOscillator();
+		synth.add(osc);
+		FilterLowPass flp = new FilterLowPass();
+		synth.add(flp);
+		// Parameters
+		osc.frequency.set(C7_FREQ);
+		osc.amplitude.set(0.5);
+		
+		osc.output.connect(flp);
+		flp.output.connect(lo);
+		
+		lo.start();
+	}
+	
+	public static double getFrequency(String note) {
+		return Note.getFrequencyForNote(MusicStringParser.getNote(note).getValue());
 	}
 	
 	public void onFirstLeapParameters(LeapParameters newParameters) {
-		
 	}
 
 	@Override
@@ -72,7 +63,9 @@ public class SoundGenerator implements LeapParameterListener {
 			receivingParameters = true;
 			onFirstLeapParameters(newParameters);
 		} else {
-			// Do OnChanged stuff
+			double freqRatio = Math.abs(newParameters.handPosition.getY())/650.0;
+			freqRatio = freqRatio > 1 ? 1 : freqRatio;
+			osc.frequency.set(C7_FREQ*freqRatio);
 		}
 	}
 

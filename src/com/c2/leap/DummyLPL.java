@@ -7,4 +7,10 @@ public class DummyLPL implements LeapParameterListener {
 		System.out.println(newParameters);
 	}
 
+	@Override
+	public void onNewGesture(GestureType gt) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
