@@ -14,10 +14,10 @@ public class Central {
 		pa.start();
 		SoundGenerator sg = new SoundGenerator();
 		sg.start(); // Start sound generator
-		LeapSensor ls = new LeapSensor();
+/*		LeapSensor ls = new LeapSensor();
 		ls.start(); // Start leap sensing
 		
 		ls.addListener(sg);// Connect leap sensing to sound generator
-	}
+*/	}
 
 }
