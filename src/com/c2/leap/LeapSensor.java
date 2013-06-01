@@ -10,8 +10,6 @@ public class LeapSensor extends Listener {
 	public void start() {
 		controller = new Controller();
 		
-		
-		
 		// Have the sample listener receive events from the controller
 		controller.addListener(this);
 	}
@@ -53,14 +51,17 @@ public class LeapSensor extends Listener {
 		// Vector location of hand in x,y, and z coordinates
 		Vector handPosition = hands.rightmost().palmPosition();
 		
+		// Vector representing center of hand's sphere. May have more interesting musical applications than translational
+		// locations.
+		Vector sphereCenter = hands.rightmost().sphereCenter();
 		
-		double positionX = handPosition.getX();
-		double positionY = handPosition.getY();
-		double positionZ = handPosition.getZ();
-		
+		// Vector representing hand velocity.
+		Vector velocity = hands.rightmost().palmVelocity();
+
 		System.out.println("Frame Received");
 		
-		parameters.update(handPosition, fingerCount, handSize);
+		// Modify update method to include whatever parameters are desired. 
+		parameters.update(sphereCenter, fingerCount, handSize);
 		
 		listener.onLeapParametersChanged(parameters);
 	}

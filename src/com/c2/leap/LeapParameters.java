@@ -23,6 +23,18 @@ public class LeapParameters {
 		return visualParameters;
 	}
 	
+	public Vector getHandPosition() {
+		return handPosition;
+	}
+	
+	public int getFingerCount() {
+		return fingerCount;
+	}
+	
+	public double getHandSize() {
+		return handSize;
+	}
+	
 	public void update(Vector position, int fingers, double size) {
 		handPosition = position;
 		fingerCount = fingers;
