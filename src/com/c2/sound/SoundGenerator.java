@@ -16,16 +16,6 @@ public class SoundGenerator implements LeapParameterListener {
 	boolean receivingParameters = false;
 
 	public void start() {
-<<<<<<< HEAD
-		// TODO Auto-generated method stub
-		}
-
-	// LeapSensor runs this method every frame. Will eventually only run when parameters are changed.
-	@Override
-	public void onLeapParametersChanged(LeapParameters newParameters) {
-		// TODO Auto-generated method stub
-		System.out.println(newParameters);
-=======
 /*		// Start the SuperCollider server
 		CommandLine scCommand = new CommandLine("scsynth");
 		scCommand.addArgument("-t").addArgument("57110");
@@ -84,7 +74,6 @@ public class SoundGenerator implements LeapParameterListener {
 		} else {
 			// Do OnChanged stuff
 		}
->>>>>>> cea9d4b736a447cd6b85747eb6c291a1f52195be
 	}
 
 }
