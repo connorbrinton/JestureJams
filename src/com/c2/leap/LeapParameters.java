@@ -22,7 +22,11 @@ public class LeapParameters {
 		visualParameters += "Y = " + Double.toString(positionY) + ", ";
 		visualParameters += "Z = " + Double.toString(positionZ) + ", ";
 		visualParameters += "Fingers = " + Integer.toString(fingerCount) + ", ";
-		visualParameters += "Hand Size = " + Double.toString(handSize) + "]";
+		visualParameters += "Hand Size = " + Double.toString(handSize) + ", ";
+		visualParameters += "Hand Velocity = " + handVelocity.magnitude() + ", ";
+		visualParameters += "Pitch = " + Double.toString(pitch) + ", ";
+		visualParameters += "Yaw = " + Double.toString(yaw) + ", ";
+		visualParameters += "Roll = " + Double.toString(roll) + "]";
 		
 		return visualParameters;
 	}

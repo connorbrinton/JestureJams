@@ -12,30 +12,31 @@ public class LeapSensor extends Listener {
 		
 		// Have the sample listener receive events from the controller
 		controller.addListener(this);
+		
+		parameters = new LeapParameters();
 	}
 
-	@Override
+
 	public void onInit(Controller controller) {
 		System.out.println("Initialized");
 	}
 
-	@Override
+
 	public void onConnect(Controller controller) {
 		System.out.println("Connected");
 	}
 
-	@Override
+
 	public void onDisconnect(Controller controller) {
 		System.out.println("Disconnected");
 	}
 
-	@Override
+
 	public void onExit(Controller controller) {
 		System.out.println("Exited");
-		System.exit(0);
 	}
 
-	@Override
+
 	public void onFrame(Controller controller) {
 		// Get the most recent frame and report some basic information
 		Frame frame = controller.frame();
@@ -65,16 +66,15 @@ public class LeapSensor extends Listener {
 		double roll = Math.sin(normal.roll());
 		
 		
-		System.out.println("Frame Received");
-		
 		// Modify update method to include whatever parameters are desired. 
 		parameters.update(sphereCenter, fingerCount, handSize, velocity, pitch, yaw, roll);
 		
 		listener.onLeapParametersChanged(parameters);
+		
+		System.out.println(parameters);
 	}
 
 	public void addListener(LeapParameterListener lpl) {
 		listener = lpl;
-
 	}
 }
