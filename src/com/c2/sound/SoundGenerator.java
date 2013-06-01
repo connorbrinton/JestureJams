@@ -16,6 +16,7 @@ public class SoundGenerator implements LeapParameterListener {
 	
 	private static final double HUMAN_LOW = 20.0;
 	private static final double HUMAN_HIGH = 20000.0;
+	private static final double C7_FREQ = getFrequency("C7");
 
 	Synthesizer synth;
 	boolean receivingParameters = false;
@@ -34,14 +35,13 @@ public class SoundGenerator implements LeapParameterListener {
 		LineOut lo = new LineOut();
 		synth.add(lo);
 
-		float cfreq = getFrequency("C4");
 		// Initialization
 		osc = new SawtoothOscillator();
 		synth.add(osc);
 		FilterLowPass flp = new FilterLowPass();
 		synth.add(flp);
 		// Parameters
-		osc.frequency.set(cfreq);
+		osc.frequency.set(C7_FREQ);
 		osc.amplitude.set(0.5);
 		
 		osc.output.connect(flp);
@@ -50,8 +50,8 @@ public class SoundGenerator implements LeapParameterListener {
 		lo.start();
 	}
 	
-	public float getFrequency(String note) {
-		return (float) Note.getFrequencyForNote(MusicStringParser.getNote(note).getValue());
+	public static double getFrequency(String note) {
+		return Note.getFrequencyForNote(MusicStringParser.getNote(note).getValue());
 	}
 	
 	public void onFirstLeapParameters(LeapParameters newParameters) {
@@ -63,7 +63,9 @@ public class SoundGenerator implements LeapParameterListener {
 			receivingParameters = true;
 			onFirstLeapParameters(newParameters);
 		} else {
-			// Do OnChanged stuff
+			double freqRatio = Math.abs(newParameters.handPosition.getY())/650.0;
+			freqRatio = freqRatio > 1 ? 1 : freqRatio;
+			osc.frequency.set(C7_FREQ*freqRatio);
 		}
 	}
 
