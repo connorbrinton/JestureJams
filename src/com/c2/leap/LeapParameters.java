@@ -18,15 +18,15 @@ public class LeapParameters {
 		double positionX = handPosition.getX();
 		double positionY = handPosition.getY();
 		double positionZ = handPosition.getZ();
-		visualParameters += "X = " + Double.toString(positionX) + ", ";	
+//		visualParameters += "X = " + Double.toString(positionX) + ", ";	
 		visualParameters += "Y = " + Double.toString(positionY) + ", ";
-		visualParameters += "Z = " + Double.toString(positionZ) + ", ";
-		visualParameters += "Fingers = " + Integer.toString(fingerCount) + ", ";
-		visualParameters += "Hand Size = " + Double.toString(handSize) + ", ";
-		visualParameters += "Hand Velocity = " + handVelocity.magnitude() + ", ";
-		visualParameters += "Pitch = " + Double.toString(pitch) + ", ";
-		visualParameters += "Yaw = " + Double.toString(yaw) + ", ";
-		visualParameters += "Roll = " + Double.toString(roll) + "]";
+//		visualParameters += "Z = " + Double.toString(positionZ) + ", ";
+//		visualParameters += "Fingers = " + Integer.toString(fingerCount) + ", ";
+//		visualParameters += "Hand Size = " + Double.toString(handSize) + ", ";
+//		visualParameters += "Hand Velocity = " + handVelocity.magnitude() + ", ";
+//		visualParameters += "Pitch = " + Double.toString(pitch) + ", ";
+//		visualParameters += "Yaw = " + Double.toString(yaw) + ", ";
+//		visualParameters += "Roll = " + Double.toString(roll) + "]";
 		
 		return visualParameters;
 	}
