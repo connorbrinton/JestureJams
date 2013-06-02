@@ -6,9 +6,16 @@ import java.awt.Frame;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import com.c2.leap.GestureType;
+import com.c2.leap.LeapParameterListener;
+import com.c2.leap.LeapParameters;
+import com.leapmotion.leap.Vector;
+
 import processing.core.PApplet;
 
-public class ProcessingFrame extends JFrame {
+public class ProcessingFrame extends JFrame implements LeapParameterListener {
+	
+	ProcessingApplet sketch;
 
 	public ProcessingFrame() {
 		this.setSize(600, 600);
@@ -34,6 +41,16 @@ public class ProcessingFrame extends JFrame {
 	
 	public void start() {
 		this.setVisible(true);
+	}
+
+	@Override
+	public void onLeapParametersChanged(LeapParameters newParameters) {
+		sketch.onLeapParametersChanged(newParameters);
+	}
+
+	@Override
+	public void onNewGesture(GestureType gt, Vector position) {
+		sketch.onNewGesture(gt, position);
 	}
 	
 }

@@ -3,9 +3,14 @@ package com.c2.processing;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 
+import com.c2.leap.GestureType;
+import com.c2.leap.LeapParameterListener;
+import com.c2.leap.LeapParameters;
+import com.leapmotion.leap.Vector;
+
 import processing.core.PApplet;
 
-public class ProcessingApplet extends PApplet {
+public class ProcessingApplet extends PApplet implements LeapParameterListener {
 
 	ImgProc imgProc = new ImgProc();
 
@@ -17,6 +22,12 @@ public class ProcessingApplet extends PApplet {
 	int[] currFrame;
 	int[] prevFrame;
 	int[] tempFrame;
+	
+	private static final double LEAP_X_RANGE = 300.0;
+	private static final double LEAP_Y_RANGE = 650.0;
+	private static final double LEAP_Z_RANGE = 250.0;
+	private static final double LEAP_VEL_RANGE = 1000.0;
+	double varX = 0.5;
 
 	public void setup() {
 		getParent().addComponentListener(new ComponentListener() {
@@ -48,7 +59,7 @@ public class ProcessingApplet extends PApplet {
 			}
 		});
 		size(getParent().getWidth(), getParent().getHeight());
-		frameRate(30);
+		frameRate(50);
 		colorMode(HSB, 255);
 		repeatSetup();
 	}
@@ -73,8 +84,9 @@ public class ProcessingApplet extends PApplet {
 					println(i);
 					break;
 				}
-				int c = color(50 + 50 * sin(PI * x / width), 127, 255 * sin(PI
+				int c = color((int) (50 + varX * 100 * sin(PI * x / width)), 127, 255 * sin(PI
 						* y / width));
+				// Modulate color
 				particles[i++] = new Particle(x, y, c);
 			}
 		}
@@ -208,6 +220,33 @@ public class ProcessingApplet extends PApplet {
 			}
 		}
 
+	}
+
+	@Override
+	public void onLeapParametersChanged(LeapParameters newParameters) {
+		varX = leapNormalizeX(newParameters.handPosition.getX());
+	}
+	
+	public double leapNormalizeX(double coord) {
+		return Math.min(Math.abs(coord) / LEAP_X_RANGE, 1);
+	}
+
+	public double leapNormalizeY(double coord) {
+		return Math.min(Math.abs(coord) / LEAP_Y_RANGE, 1);
+	}
+
+	public double leapNormalizeZ(double coord) {
+		return Math.min(Math.abs(coord) / LEAP_Z_RANGE, 1);
+	}
+	
+	public double leapNormalizeVel(double velocity) {
+		return Math.min(Math.abs(velocity) / LEAP_VEL_RANGE, 1);
+	}
+
+	@Override
+	public void onNewGesture(GestureType gt, Vector position) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

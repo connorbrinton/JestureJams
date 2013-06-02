@@ -14,11 +14,14 @@ public class Central {
 	public static void main(String[] args) {
 		ProcessingFrame pa = new ProcessingFrame();
 		pa.start();
+		
 		SoundGenerator sg = new SoundGenerator();
 		sg.start(); // Start sound generator
+		
 		LeapSensor ls = new LeapSensor();
 		ls.start(); // Start leap sensing
 		
+		ls.addListener(pa);
 		ls.addListener(sg);// Connect leap sensing to sound generator
 		
         System.out.println("Press Enter to quit...");
