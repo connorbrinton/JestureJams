@@ -22,7 +22,7 @@ public class ProcessingApplet extends PApplet implements LeapParameterListener {
 	int[] currFrame;
 	int[] prevFrame;
 	int[] tempFrame;
-	
+
 	private static final double LEAP_X_RANGE = 300.0;
 	private static final double LEAP_Y_RANGE = 650.0;
 	private static final double LEAP_Z_RANGE = 250.0;
@@ -31,31 +31,31 @@ public class ProcessingApplet extends PApplet implements LeapParameterListener {
 
 	public void setup() {
 		getParent().addComponentListener(new ComponentListener() {
-			
+
 			@Override
 			public void componentShown(ComponentEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void componentResized(ComponentEvent e) {
-/*				noLoop();
-				size(e.getComponent().getWidth(), e.getComponent().getHeight());
-				repeatSetup();
-				loop();*/
+				/*
+				 * noLoop(); size(e.getComponent().getWidth(),
+				 * e.getComponent().getHeight()); repeatSetup(); loop();
+				 */
 			}
-			
+
 			@Override
 			public void componentMoved(ComponentEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void componentHidden(ComponentEvent e) {
 				// TODO Auto-generated method stub
-				
+
 			}
 		});
 		size(getParent().getWidth(), getParent().getHeight());
@@ -63,7 +63,7 @@ public class ProcessingApplet extends PApplet implements LeapParameterListener {
 		colorMode(HSB, 255);
 		repeatSetup();
 	}
-	
+
 	public void repeatSetup() {
 		currFrame = new int[width * height];
 		prevFrame = new int[width * height];
@@ -84,8 +84,8 @@ public class ProcessingApplet extends PApplet implements LeapParameterListener {
 					println(i);
 					break;
 				}
-				int c = color((int) (50 + varX * 100 * sin(PI * x / width)), 127, 255 * sin(PI
-						* y / width));
+				int c = color((int) (50 + 50 * sin(PI * x / width)), 127,
+						255 * sin(PI * y / width));
 				// Modulate color
 				particles[i++] = new Particle(x, y, c);
 			}
@@ -103,6 +103,7 @@ public class ProcessingApplet extends PApplet implements LeapParameterListener {
 			particles[i].update();
 			particles[i].draw();
 		}
+//		imgProc.updateByParameters(currFrame, width, height);
 		imgProc.drawPixelArray(currFrame, 0, 0, width, height);
 		arraycopy(currFrame, prevFrame);
 	}
@@ -207,10 +208,34 @@ public class ProcessingApplet extends PApplet implements LeapParameterListener {
 				for (int x = 0; x < w; x++) {
 					c = src[x + y * w];
 					a = (int) (as * ((c >> 24) & 0xFF));
-					r = (int) (s * ((c >> 16) & 0xFF));
 					g = (int) (s * ((c >> 8) & 0xFF));
+					r = (int) ( varX*g + (s * ((c >> 16) & 0xFF)))/2;
 					b = (int) (s * ((c) & 0xFF));
 					dst[x + y * w] = (a << 24) | (r << 16) | (g << 8) | b;
+					// ch = hue(c);
+					// cs = saturation(c);
+					// cb = brightness(c) * s;
+					// dst[x + y*w] = color(ch, cs, cb);
+					// dst[x + y*w] = src[x + y*w];
+				}
+			}
+		}
+
+		public void updateByParameters(int[] currFrame, int w, int h) {
+			int r;
+			int g;
+			int b;
+			int c;
+			int a;
+			for (int y = 0; y < h; y++) {
+				for (int x = 0; x < w; x++) {
+					c = currFrame[x + y * w];
+					a = (int) (((c >> 24) & 0xFF));
+//					r = (int) (2 * varX * ((c >> 16) & 0xFF));
+					r = (int) (varX * 255);
+					g = (int) (((c >> 8) & 0xFF));
+					b = (int) (((c) & 0xFF));
+					currFrame[x + y * w] = (a << 24) | (r << 16) | (g << 8) | b;
 					// ch = hue(c);
 					// cs = saturation(c);
 					// cb = brightness(c) * s;
@@ -225,8 +250,9 @@ public class ProcessingApplet extends PApplet implements LeapParameterListener {
 	@Override
 	public void onLeapParametersChanged(LeapParameters newParameters) {
 		varX = leapNormalizeX(newParameters.handPosition.getX());
+		System.out.println(varX);
 	}
-	
+
 	public double leapNormalizeX(double coord) {
 		return Math.min(Math.abs(coord) / LEAP_X_RANGE, 1);
 	}
@@ -238,7 +264,7 @@ public class ProcessingApplet extends PApplet implements LeapParameterListener {
 	public double leapNormalizeZ(double coord) {
 		return Math.min(Math.abs(coord) / LEAP_Z_RANGE, 1);
 	}
-	
+
 	public double leapNormalizeVel(double velocity) {
 		return Math.min(Math.abs(velocity) / LEAP_VEL_RANGE, 1);
 	}
@@ -246,7 +272,7 @@ public class ProcessingApplet extends PApplet implements LeapParameterListener {
 	@Override
 	public void onNewGesture(GestureType gt, Vector position) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }
