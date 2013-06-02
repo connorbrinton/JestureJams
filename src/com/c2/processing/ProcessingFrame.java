@@ -1,5 +1,8 @@
 package com.c2.processing;
 
+import java.awt.FlowLayout;
+import java.awt.Frame;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -7,20 +10,26 @@ import processing.core.PApplet;
 
 public class ProcessingFrame extends JFrame {
 
-	public class ProcessingApplet extends PApplet {
-
-	}
-
 	public ProcessingFrame() {
 		this.setSize(600, 600);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		JPanel panel = new JPanel();
+		((FlowLayout)panel.getLayout()).setVgap(0);
 		PApplet sketch = new ProcessingApplet();
 		panel.add(sketch);
-		this.add(panel);
+		this.setContentPane(panel);
 		
-		sketch.init();
 		this.setVisible(true);
+		this.setExtendedState(getExtendedState() | JFrame.MAXIMIZED_BOTH);
+
+		sketch.init();
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		sketch.repaint();
 	}
 	
 	public void start() {
