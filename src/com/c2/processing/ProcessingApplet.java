@@ -113,8 +113,7 @@ public class ProcessingApplet extends PApplet implements LeapParameterListener {
 		float y;
 		int c;
 		
-		
-		float speed = 2;
+		public float speed = 2;
 
 		Particle(int x, int y, int c) {
 			this.x = x;
@@ -252,6 +251,9 @@ public class ProcessingApplet extends PApplet implements LeapParameterListener {
 	@Override
 	public void onLeapParametersChanged(LeapParameters newParameters) {
 		varX = Math.max(leapNormalizeX(newParameters.handPosition1.getX()), leapNormalizeX(newParameters.handPosition2.getX()) );
+		for (Particle p : this.particles) {
+			p.speed = (float) (4 * Math.abs(newParameters.pitch));
+		}
 //		System.out.println(varX);
 	}
 
