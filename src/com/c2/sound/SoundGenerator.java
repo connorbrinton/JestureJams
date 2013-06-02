@@ -15,6 +15,10 @@ import com.jsyn.unitgen.UnitOscillator;
 
 public class SoundGenerator implements LeapParameterListener {
 	
+	private static final double LEAP_X_RANGE = 300.0;
+	private static final double LEAP_Y_RANGE = 650.0;
+	private static final double LEAP_Z_RANGE = 250.0;
+	
 	private static final double HUMAN_LOW = 20.0;
 	private static final double HUMAN_HIGH = 20000.0;
 	private static final double C7_FREQ = getFrequency("C7");
@@ -64,17 +68,25 @@ public class SoundGenerator implements LeapParameterListener {
 			receivingParameters = true;
 			onFirstLeapParameters(newParameters);
 		} else {
-			double freqRatio = leapNormalize(newParameters.handPosition.getY());
+			double freqRatio = leapNormalizeY(newParameters.handPosition.getY());
 			freqRatio = freqRatio > 1 ? 1 : freqRatio;
 			osc.frequency.set(C7_FREQ*freqRatio);
 			
-			double cutRatio = leapNormalize(newParameters.handPosition.getZ());
+			double cutRatio = 1 - leapNormalizeZ(newParameters.handPosition.getZ());
 			flp.frequency.set(HUMAN_HIGH*cutRatio);
 		}
 	}
+
+	public double leapNormalizeX(double coord) {
+		return Math.min(Math.abs(coord)/LEAP_X_RANGE, 1);
+	}
 	
-	public double leapNormalize(double coord) {
-		return Math.min(Math.abs(650 - coord)/650.0, 1);
+	public double leapNormalizeY(double coord) {
+		return Math.min(Math.abs(coord)/LEAP_Y_RANGE, 1);
+	}
+	
+	public double leapNormalizeZ(double coord) {
+		return Math.min(Math.abs(coord)/LEAP_Z_RANGE, 1);
 	}
 
 	@Override
