@@ -90,6 +90,7 @@ public class SoundGenerator implements LeapParameterListener {
 
 		// Connecting stuff upppp!
 		oscLeft.output.connect(flp);
+		oscRight.output.connect(flp);
 		flp.output.connect(lo);
 
 		lo.start();
