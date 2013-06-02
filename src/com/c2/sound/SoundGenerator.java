@@ -12,6 +12,7 @@ import com.jsyn.unitgen.FilterLowPass;
 import com.jsyn.unitgen.LineOut;
 import com.jsyn.unitgen.SawtoothOscillator;
 import com.jsyn.unitgen.UnitOscillator;
+import com.leapmotion.leap.Vector;
 
 public class SoundGenerator implements LeapParameterListener {
 	
@@ -73,7 +74,7 @@ public class SoundGenerator implements LeapParameterListener {
 			osc.frequency.set(C5_FREQ*freqRatio);
 			
 			double cutRatio = 1 - leapNormalizeZ(newParameters.handPosition.getZ());
-			System.out.println(cutRatio);
+//			System.out.println(cutRatio);
 			flp.frequency.set(HUMAN_HIGH * cutRatio);
 		}
 	}
@@ -91,7 +92,7 @@ public class SoundGenerator implements LeapParameterListener {
 	}
 
 	@Override
-	public void onNewGesture(GestureType gt , double height) {
+	public void onNewGesture(GestureType gt , Vector position) {
 		// TODO Auto-generated method stub
 		
 	}

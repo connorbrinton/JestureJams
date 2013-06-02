@@ -10,8 +10,6 @@ public class LeapSensor extends Listener {
 	private LeapParameterListener listener;
 	public Controller controller;
 	private LeapParameters parameters;
-	private  boolean runOnce = false;
-	private int gestureID;
 
 	public void start() {
 		controller = new Controller();
@@ -20,12 +18,7 @@ public class LeapSensor extends Listener {
 		controller.addListener(this);
 
 		parameters = new LeapParameters();
-		
-		// Configure Custom Gesture Settings
-		controller.config().setFloat("Gesture.KeyTap.MinDownVelocity ", 5);
-		controller.config().setFloat("Gesture.KeyTap.MinDistance", 1);
-		controller.config().setFloat("Gesture.KeyTap.HistorySeconds", (float) .3);
-		controller.config().save();
+
 	}
 
 
@@ -93,6 +86,11 @@ public class LeapSensor extends Listener {
 
 	private void gestureProcessing(Frame frame) {
 		if (!frame.fingers().empty()) {
+			
+			
+			// Configure Custom Gesture Settings
+			controller.config().setFloat("Gesture.KeyTap.MinDownVelocity ", 30);
+			controller.config().save();
 
 			controller.enableGesture(Type.TYPE_SWIPE);
 			controller.enableGesture(Type.TYPE_KEY_TAP);
@@ -105,32 +103,21 @@ public class LeapSensor extends Listener {
 
 			for (Gesture gesture : gestureList) {
 				if(gesture.type() == Type.TYPE_KEY_TAP) {
-					if (!runOnce) {
-						gestureID = gesture.id();
+					KeyTapGesture tap = new KeyTapGesture(gesture);
+					if(tap.state() ==State.STATE_STOP) {
+						listener.onNewGesture(GestureType.KEY_PRESS, tap.hands().rightmost().palmPosition());
+						System.out.println("Key Gesture FINALLY!!");
 					}
-										
-					if (gesture.state() == State.STATE_START) {
-						System.out.println("Gesture Start");
+				}
+				if(gesture.type() == Type.TYPE_SWIPE) {
+					SwipeGesture swipe = new SwipeGesture(gesture);
+					if (swipe.state() == State.STATE_STOP) {
+						listener.onNewGesture(GestureType.SWIPE, swipe.hands().rightmost().palmPosition());
 					}
 					
-					if(gesture.isValid() && gesture.id() == gestureID) {
-						System.out.println("Gesture is valid");
-					}
-					
-					if (gesture.state() == State.STATE_STOP && gesture.id() == gestureID) {
-						listener.onNewGesture(GestureType.KEY_PRESS , frame.hands().rightmost().palmPosition().getY());
-						runOnce = false;
-						System.out.println("Key Tap Stop");
-					}
-				}				
+				}
 			}
 		}
-
-//		if(frame.fingers().leftmost().tipVelocity().magnitude() > 500) {
-//			listener.onNewGesture(GestureType.KEY_PRESS, frame.fingers().leftmost().tipPosition().getY());
-//			System.out.println("Finger Velocity Gesture");
-//		}
-
 
 	}
 
