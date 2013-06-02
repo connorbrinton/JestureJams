@@ -1,5 +1,7 @@
 package com.c2.leap;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 import com.leapmotion.leap.Controller;
@@ -16,11 +18,9 @@ import com.leapmotion.leap.Vector;
 
 public class LeapSensor extends Listener {
 
-	private LeapParameterListener listener;
+	private List<LeapParameterListener> listeners = new ArrayList<LeapParameterListener>();
 	public Controller controller;
 	private LeapParameters parameters;
-	private Queue<Vector> data = new LinkedList<Vector>();
-	private static final int DATA_CAP = 30;
 
 	public void start() {
 		controller = new Controller();
@@ -96,7 +96,9 @@ public class LeapSensor extends Listener {
 
 		if(!frame.hands().empty() && frame.hands().rightmost().sphereCenter().getY() != 0) {
 //			System.out.println(parameters);
-			listener.onLeapParametersChanged(parameters);
+			for (LeapParameterListener lpl : listeners) {
+				lpl.onLeapParametersChanged(parameters);
+			}
 		}
 	}
 
@@ -141,14 +143,18 @@ public class LeapSensor extends Listener {
 				if(gesture.type() == Type.TYPE_KEY_TAP) {
 					KeyTapGesture tap = new KeyTapGesture(gesture);
 					if(tap.state() ==State.STATE_STOP) {
-						listener.onNewGesture(GestureType.KEY_PRESS, tap.hands().rightmost().palmPosition());
+						for (LeapParameterListener lpl : listeners) {
+							lpl.onNewGesture(GestureType.KEY_PRESS, tap.hands().rightmost().palmPosition());
+						}
 						System.out.println("Key Gesture FINALLY!!");
 					}
 				}
 				if(gesture.type() == Type.TYPE_SWIPE) {
 					SwipeGesture swipe = new SwipeGesture(gesture);
 					if (swipe.state() == State.STATE_STOP) {
-						listener.onNewGesture(GestureType.SWIPE, swipe.direction());
+						for (LeapParameterListener lpl : listeners) {
+							lpl.onNewGesture(GestureType.SWIPE, swipe.direction());
+						}
 						System.out.println("Swipe Gesture!!");
 					}
 
@@ -159,6 +165,6 @@ public class LeapSensor extends Listener {
 	}
 
 	public void addListener(LeapParameterListener lpl) {
-		listener = lpl;
+		listeners.add(lpl);
 	}
 }
