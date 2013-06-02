@@ -69,12 +69,12 @@ public class SoundGenerator implements LeapParameterListener {
 			osc.frequency.set(C7_FREQ*freqRatio);
 			
 			double cutRatio = leapNormalize(newParameters.handPosition.getZ());
-			flp.frequency.set(C7_FREQ*cutRatio);
+			flp.frequency.set(HUMAN_HIGH*cutRatio);
 		}
 	}
 	
 	public double leapNormalize(double coord) {
-		return Math.min(Math.abs(coord)/650.0, 1);
+		return Math.min(Math.abs(650 - coord)/650.0, 1);
 	}
 
 	@Override
