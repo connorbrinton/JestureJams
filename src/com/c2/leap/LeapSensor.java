@@ -59,7 +59,7 @@ public class LeapSensor extends Listener {
 
 		parameterProcessing(frame);
 		gestureProcessing(frame);
-//				System.out.println(parameters);
+				System.out.println(parameters);
 	}
 
 	private void parameterProcessing(Frame frame) {
