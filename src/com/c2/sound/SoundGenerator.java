@@ -22,6 +22,7 @@ public class SoundGenerator implements LeapParameterListener {
 	boolean receivingParameters = false;
 	
 	UnitOscillator osc;
+	FilterLowPass flp;
 
 	public void start() {
 		synth = JSyn.createSynthesizer();
@@ -35,15 +36,14 @@ public class SoundGenerator implements LeapParameterListener {
 		LineOut lo = new LineOut();
 		synth.add(lo);
 
-		// Initialization
+		// Sawtooth
 		osc = new SawtoothOscillator();
 		synth.add(osc);
-		FilterLowPass flp = new FilterLowPass();
+		flp = new FilterLowPass();
 		synth.add(flp);
 		// Parameters
 		osc.frequency.set(C7_FREQ);
 		osc.amplitude.set(0.5);
-		
 		osc.output.connect(flp);
 		flp.output.connect(lo);
 		
@@ -63,10 +63,15 @@ public class SoundGenerator implements LeapParameterListener {
 			receivingParameters = true;
 			onFirstLeapParameters(newParameters);
 		} else {
-			double freqRatio = Math.abs(newParameters.handPosition.getY())/650.0;
+			double freqRatio = leapNormalize(newParameters.handPosition.getY());
 			freqRatio = freqRatio > 1 ? 1 : freqRatio;
 			osc.frequency.set(C7_FREQ*freqRatio);
+			
+			double cutRatio = leapNormalize(newParameters.handPosition.getZ());
 		}
 	}
-
+	
+	public double leapNormalize(double coord) {
+		return Math.min(Math.abs(coord)/650.0, 1);
+	}
 }
