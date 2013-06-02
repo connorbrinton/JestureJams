@@ -18,6 +18,12 @@ public class LeapSensor extends Listener {
 		controller.addListener(this);
 
 		parameters = new LeapParameters();
+		
+		// Configure Custom Gesture Settings
+		controller.config().setFloat("Gesture.KeyTap.MinDownVelocity ", 25);
+		controller.config().setFloat("Gesture.KeyTap.MinDistance", 2);
+		controller.config().setFloat("Gesture.KeyTap.HistorySeconds", (float) .25);
+		controller.config().save();
 	}
 
 
@@ -91,8 +97,7 @@ public class LeapSensor extends Listener {
 			controller.enableGesture(Type.TYPE_SCREEN_TAP);
 			controller.enableGesture(Type.TYPE_CIRCLE);
 			
-			Config config = new Config();
-		
+
 
 			GestureList gestureList = frame.gestures();
 
@@ -105,11 +110,12 @@ public class LeapSensor extends Listener {
 						runOnce=true;
 					}
 					if (gesture.state() == State.STATE_START && gesture.id() == gestureID) {
-						listener.onNewGesture(GestureType.KEY_PRESS);
+
 						System.out.println("Key Tap Start");
 					}
 					
 					if (gesture.state() == State.STATE_STOP && gesture.id() == gestureID) {
+						listener.onNewGesture(GestureType.KEY_PRESS , frame.hands().rightmost().palmPosition().getY());
 						runOnce = false;
 						System.out.println("Key Tap Stop");
 					}

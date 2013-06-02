@@ -8,7 +8,7 @@ public class DummyLPL implements LeapParameterListener {
 	}
 
 	@Override
-	public void onNewGesture(GestureType gt) {
+	public void onNewGesture(GestureType gt, double height) {
 		// TODO Auto-generated method stub
 		
 	}

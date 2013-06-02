@@ -3,6 +3,7 @@ package com.c2.sound;
 import org.jfugue.MusicStringParser;
 import org.jfugue.Note;
 
+import com.c2.leap.GestureType;
 import com.c2.leap.LeapParameterListener;
 import com.c2.leap.LeapParameters;
 import com.jsyn.JSyn;
@@ -67,6 +68,12 @@ public class SoundGenerator implements LeapParameterListener {
 			freqRatio = freqRatio > 1 ? 1 : freqRatio;
 			osc.frequency.set(C7_FREQ*freqRatio);
 		}
+	}
+
+	@Override
+	public void onNewGesture(GestureType gt , double height) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
