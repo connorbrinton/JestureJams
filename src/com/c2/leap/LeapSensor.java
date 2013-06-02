@@ -1,15 +1,26 @@
 package com.c2.leap;
-import org.omg.PortableServer.ID_ASSIGNMENT_POLICY_ID;
+import java.util.LinkedList;
+import java.util.Queue;
 
-import com.leapmotion.leap.*;
+import com.leapmotion.leap.Controller;
+import com.leapmotion.leap.Frame;
+import com.leapmotion.leap.Gesture;
 import com.leapmotion.leap.Gesture.State;
 import com.leapmotion.leap.Gesture.Type;
+import com.leapmotion.leap.GestureList;
+import com.leapmotion.leap.HandList;
+import com.leapmotion.leap.KeyTapGesture;
+import com.leapmotion.leap.Listener;
+import com.leapmotion.leap.SwipeGesture;
+import com.leapmotion.leap.Vector;
 
 public class LeapSensor extends Listener {
 
 	private LeapParameterListener listener;
 	public Controller controller;
 	private LeapParameters parameters;
+	private Queue<Vector> data = new LinkedList<Vector>();
+	private static final int DATA_CAP = 30;
 
 	public void start() {
 		controller = new Controller();
@@ -48,7 +59,7 @@ public class LeapSensor extends Listener {
 
 		parameterProcessing(frame);
 		gestureProcessing(frame);
-		//		System.out.println(parameters);
+//				System.out.println(parameters);
 	}
 
 	private void parameterProcessing(Frame frame) {
@@ -77,14 +88,36 @@ public class LeapSensor extends Listener {
 		double yaw = Math.sin(normal.yaw());
 		double roll = Math.sin(normal.roll());
 
+/*		addVectorToAverage(sphereCenter);
+		Vector average = getVectorAverage();*/
 
 		// Modify update method to include whatever parameters are desired. 
 		parameters.update(sphereCenter, fingerCount, handSize, velocity, pitch, yaw, roll);
 
-		if(!frame.hands().empty()) {
+		if(!frame.hands().empty() && frame.hands().rightmost().sphereCenter().getY() != 0) {
+//			System.out.println(parameters);
 			listener.onLeapParametersChanged(parameters);
 		}
 	}
+
+/*	private Vector getVectorAverage() {
+		Vector average = new Vector();
+		for (Vector v : data) {
+			average.setX(average.getX() + v.getX()/data.size());
+			average.setY(average.getY() + v.getY()/data.size());
+			average.setZ(average.getZ() + v.getZ()/data.size());
+		}
+		return average;
+	}
+
+
+	private void addVectorToAverage(Vector sphereCenter) {
+		data.add(sphereCenter);
+		if (data.size() > DATA_CAP) {
+			data.poll();
+		}
+	}*/
+
 
 	private void gestureProcessing(Frame frame) {
 		if (!frame.fingers().empty()) {
