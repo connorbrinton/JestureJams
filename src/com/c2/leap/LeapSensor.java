@@ -1,4 +1,6 @@
 package com.c2.leap;
+import org.omg.PortableServer.ID_ASSIGNMENT_POLICY_ID;
+
 import com.leapmotion.leap.*;
 import com.leapmotion.leap.Gesture.State;
 import com.leapmotion.leap.Gesture.Type;
@@ -20,9 +22,9 @@ public class LeapSensor extends Listener {
 		parameters = new LeapParameters();
 		
 		// Configure Custom Gesture Settings
-		controller.config().setFloat("Gesture.KeyTap.MinDownVelocity ", 25);
-		controller.config().setFloat("Gesture.KeyTap.MinDistance", 2);
-		controller.config().setFloat("Gesture.KeyTap.HistorySeconds", (float) .25);
+		controller.config().setFloat("Gesture.KeyTap.MinDownVelocity ", 5);
+		controller.config().setFloat("Gesture.KeyTap.MinDistance", 1);
+		controller.config().setFloat("Gesture.KeyTap.HistorySeconds", (float) .3);
 		controller.config().save();
 	}
 
@@ -103,15 +105,16 @@ public class LeapSensor extends Listener {
 
 			for (Gesture gesture : gestureList) {
 				if(gesture.type() == Type.TYPE_KEY_TAP) {
-
-					if (!runOnce){
-						gestureID=gesture.id();
-						KeyTapGesture keyTap = new KeyTapGesture(gesture); // Can give more info about the key tap later
-						runOnce=true;
+					if (!runOnce) {
+						gestureID = gesture.id();
 					}
-					if (gesture.state() == State.STATE_START && gesture.id() == gestureID) {
-
-						System.out.println("Key Tap Start");
+										
+					if (gesture.state() == State.STATE_START) {
+						System.out.println("Gesture Start");
+					}
+					
+					if(gesture.isValid() && gesture.id() == gestureID) {
+						System.out.println("Gesture is valid");
 					}
 					
 					if (gesture.state() == State.STATE_STOP && gesture.id() == gestureID) {
@@ -122,6 +125,11 @@ public class LeapSensor extends Listener {
 				}				
 			}
 		}
+
+//		if(frame.fingers().leftmost().tipVelocity().magnitude() > 500) {
+//			listener.onNewGesture(GestureType.KEY_PRESS, frame.fingers().leftmost().tipPosition().getY());
+//			System.out.println("Finger Velocity Gesture");
+//		}
 
 
 	}
