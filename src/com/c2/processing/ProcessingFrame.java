@@ -22,7 +22,7 @@ public class ProcessingFrame extends JFrame implements LeapParameterListener {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		JPanel panel = new JPanel();
 		((FlowLayout)panel.getLayout()).setVgap(0);
-		PApplet sketch = new ProcessingApplet();
+		sketch = new ProcessingApplet();
 		panel.add(sketch);
 		this.setContentPane(panel);
 		

@@ -78,6 +78,8 @@ public class LeapSensor extends Listener {
 		// Vector representing center of hand's sphere. May have more interesting musical applications than translational
 		// locations.
 		Vector sphereCenter = hands.rightmost().sphereCenter();
+		
+		Vector sphereCenter2 = hands.leftmost().sphereCenter();
 
 		// Vector representing hand velocity.
 		Vector velocity = hands.rightmost().palmVelocity();
@@ -92,7 +94,7 @@ public class LeapSensor extends Listener {
 		Vector average = getVectorAverage();*/
 
 		// Modify update method to include whatever parameters are desired. 
-		parameters.update(sphereCenter, fingerCount, handSize, velocity, pitch, yaw, roll);
+		parameters.update(sphereCenter, sphereCenter2, fingerCount, handSize, velocity, pitch, yaw, roll);
 
 		if(!frame.hands().empty() && frame.hands().rightmost().sphereCenter().getY() != 0) {
 //			System.out.println(parameters);
@@ -101,7 +103,7 @@ public class LeapSensor extends Listener {
 			}
 		}
 	}
-
+	
 /*	private Vector getVectorAverage() {
 		Vector average = new Vector();
 		for (Vector v : data) {
