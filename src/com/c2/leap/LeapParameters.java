@@ -12,6 +12,9 @@ public class LeapParameters {
 	public double pitch;
 	public double yaw;
 	public double roll;
+	public double pitch2;
+	public double yaw2;
+	public double roll2;
 	
 	public String toString() {
 		String visualParameters = "[";
@@ -32,7 +35,7 @@ public class LeapParameters {
 		return visualParameters;
 	}
 	
-	public void update(Vector position1, Vector position2, int fingers, double size, Vector velocity, double inputPitch, double inputYaw, double inputRoll) {
+	public void update(Vector position1, Vector position2, int fingers, double size, Vector velocity, double inputPitch, double inputYaw, double inputRoll, double inputPitch2, double inputYaw2, double inputRoll2) {
 		handPosition1 = position1;
 		handPosition2 = position2;
 		fingerCount = fingers;
@@ -41,6 +44,9 @@ public class LeapParameters {
 		pitch = inputPitch;
 		yaw = inputYaw;
 		roll = inputRoll;
+		pitch2 = inputPitch2;
+		yaw2 = inputYaw2;
+		roll2 = inputRoll2;
 	}
 
 }

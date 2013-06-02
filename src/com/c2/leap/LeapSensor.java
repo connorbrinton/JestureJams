@@ -79,7 +79,10 @@ public class LeapSensor extends Listener {
 		// locations.
 		Vector sphereCenter = hands.rightmost().sphereCenter();
 		
-		Vector sphereCenter2 = hands.leftmost().sphereCenter();
+		Vector handPosition2 = hands.leftmost().palmPosition();
+		double pitch2 = Math.sin(hands.leftmost().palmNormal().pitch());
+		double yaw2 = Math.sin(hands.leftmost().palmNormal().yaw());
+		double roll2 = Math.sin(hands.leftmost().palmNormal().roll());
 
 		// Vector representing hand velocity.
 		Vector velocity = hands.rightmost().palmVelocity();
@@ -94,9 +97,9 @@ public class LeapSensor extends Listener {
 		Vector average = getVectorAverage();*/
 
 		// Modify update method to include whatever parameters are desired. 
-		parameters.update(sphereCenter, sphereCenter2, fingerCount, handSize, velocity, pitch, yaw, roll);
+		parameters.update(handPosition, handPosition2, fingerCount, handSize, velocity, pitch, yaw, roll, pitch2, yaw2, roll2);
 
-		if(!frame.hands().empty() && frame.hands().rightmost().sphereCenter().getY() != 0) {
+		if(!frame.hands().empty()) {
 //			System.out.println(parameters);
 			for (LeapParameterListener lpl : listeners) {
 				lpl.onLeapParametersChanged(parameters);
