@@ -22,7 +22,7 @@ public class SoundGenerator implements LeapParameterListener {
 
 	private static final double HUMAN_LOW = 20.0;
 	private static final double HUMAN_HIGH = 20000.0;
-	private static final double C5_FREQ = getFrequency("C7");
+	private static final double C5_FREQ = getFrequency("C5");
 
 	Synthesizer synth;
 	boolean receivingParameters = false;
@@ -70,9 +70,9 @@ public class SoundGenerator implements LeapParameterListener {
 
 	@Override
 	public void onLeapParametersChanged(LeapParameters newParameters) {
-		double freqRatio = 0.5*leapNormalizeY(newParameters.handPosition.getY());
-		freqRatio = freqRatio > 1 ? 1 : freqRatio;
-		osc.amplitude.set(freqRatio);
+		double ampRatio = 0.5*leapNormalizeY(newParameters.handPosition.getY());
+		ampRatio = ampRatio > 1 ? 1 : ampRatio;
+		osc.amplitude.set(ampRatio);
 
 		double cutRatio = 0.5 - 0.5*leapNormalizeZ(newParameters.handPosition.getZ());
 		// System.out.println(cutRatio);
