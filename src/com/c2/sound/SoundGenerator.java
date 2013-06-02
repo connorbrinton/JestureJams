@@ -10,8 +10,9 @@ import com.jsyn.JSyn;
 import com.jsyn.Synthesizer;
 import com.jsyn.unitgen.FilterLowPass;
 import com.jsyn.unitgen.LineOut;
-import com.jsyn.unitgen.SawtoothOscillator;
+import com.jsyn.unitgen.SineOscillator;
 import com.jsyn.unitgen.UnitOscillator;
+import com.jsyn.unitgen.WhiteNoise;
 
 public class SoundGenerator implements LeapParameterListener {
 	
@@ -42,13 +43,17 @@ public class SoundGenerator implements LeapParameterListener {
 		synth.add(lo);
 
 		// Sawtooth
-		osc = new SawtoothOscillator();
+		osc = new SineOscillator();
 		synth.add(osc);
-		flp = new FilterLowPass();
-		synth.add(flp);
-		// Parameters
 		osc.frequency.set(C5_FREQ);
 		osc.amplitude.set(0.5);
+
+		// Filter
+		flp = new FilterLowPass();
+		synth.add(flp);
+		flp.frequency.set(C5_FREQ);
+		
+		// Connecting stuff upppp!
 		osc.output.connect(flp);
 		flp.output.connect(lo);
 		
@@ -70,7 +75,7 @@ public class SoundGenerator implements LeapParameterListener {
 		} else {
 			double freqRatio = leapNormalizeY(newParameters.handPosition.getY());
 			freqRatio = freqRatio > 1 ? 1 : freqRatio;
-			osc.frequency.set(C5_FREQ*freqRatio);
+			osc.amplitude.set(freqRatio);
 			
 			double cutRatio = 1 - leapNormalizeZ(newParameters.handPosition.getZ());
 			System.out.println(cutRatio);
