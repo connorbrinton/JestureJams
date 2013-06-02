@@ -112,7 +112,7 @@ public class SoundGenerator implements LeapParameterListener {
 
 	@Override
 	public void onLeapParametersChanged(LeapParameters newParameters) {
-		double ampRatio = 0.4*leapNormalizeX(newParameters.handPosition1.getX()) + 0.25;
+		double ampRatio = 0.4*(1 - leapNormalizeX(newParameters.handPosition1.getX())) + 0.25;
 		ampRatio = ampRatio > 1 ? 1 : ampRatio;
 		oscLeft.amplitude.set(ampRatio);
 		ampRatio = 0.4*leapNormalizeX(newParameters.handPosition2.getX()) + 0.25;
