@@ -48,7 +48,7 @@ public class LeapSensor extends Listener {
 
 		parameterProcessing(frame);
 		gestureProcessing(frame);
-//		System.out.println(parameters);
+		//		System.out.println(parameters);
 	}
 
 	private void parameterProcessing(Frame frame) {
@@ -81,22 +81,25 @@ public class LeapSensor extends Listener {
 		// Modify update method to include whatever parameters are desired. 
 		parameters.update(sphereCenter, fingerCount, handSize, velocity, pitch, yaw, roll);
 
-		listener.onLeapParametersChanged(parameters);
+		if(!frame.hands().empty()) {
+			listener.onLeapParametersChanged(parameters);
+		}
 	}
 
 	private void gestureProcessing(Frame frame) {
 		if (!frame.fingers().empty()) {
-			
-			
+
+
 			// Configure Custom Gesture Settings
 			controller.config().setFloat("Gesture.KeyTap.MinDownVelocity ", 30);
+			controller.config().setFloat("Gesture.Swipe.MinVelocity ", 1000);
 			controller.config().save();
 
 			controller.enableGesture(Type.TYPE_SWIPE);
 			controller.enableGesture(Type.TYPE_KEY_TAP);
 			controller.enableGesture(Type.TYPE_SCREEN_TAP);
 			controller.enableGesture(Type.TYPE_CIRCLE);
-			
+
 
 
 			GestureList gestureList = frame.gestures();
@@ -112,9 +115,10 @@ public class LeapSensor extends Listener {
 				if(gesture.type() == Type.TYPE_SWIPE) {
 					SwipeGesture swipe = new SwipeGesture(gesture);
 					if (swipe.state() == State.STATE_STOP) {
-						listener.onNewGesture(GestureType.SWIPE, swipe.hands().rightmost().palmPosition());
+						listener.onNewGesture(GestureType.SWIPE, swipe.direction());
+						System.out.println("Swipe Gesture!!");
 					}
-					
+
 				}
 			}
 		}

@@ -10,19 +10,15 @@ import com.jsyn.JSyn;
 import com.jsyn.Synthesizer;
 import com.jsyn.unitgen.FilterLowPass;
 import com.jsyn.unitgen.LineOut;
-import com.jsyn.unitgen.SineOscillator;
+import com.jsyn.unitgen.SawtoothOscillator;
 import com.jsyn.unitgen.UnitOscillator;
 import com.leapmotion.leap.Vector;
 
 public class SoundGenerator implements LeapParameterListener {
 	
-	private static final double LEAP_X_RANGE = 300.0;
-	private static final double LEAP_Y_RANGE = 650.0;
-	private static final double LEAP_Z_RANGE = 250.0;
-	
 	private static final double HUMAN_LOW = 20.0;
 	private static final double HUMAN_HIGH = 20000.0;
-	private static final double C5_FREQ = getFrequency("C7");
+	private static final double C7_FREQ = getFrequency("C7");
 
 	Synthesizer synth;
 	boolean receivingParameters = false;
@@ -43,17 +39,13 @@ public class SoundGenerator implements LeapParameterListener {
 		synth.add(lo);
 
 		// Sawtooth
-		osc = new SineOscillator();
+		osc = new SawtoothOscillator();
 		synth.add(osc);
-		osc.frequency.set(C5_FREQ);
-		osc.amplitude.set(0.5);
-
-		// Filter
 		flp = new FilterLowPass();
 		synth.add(flp);
-		flp.frequency.set(C5_FREQ);
-		
-		// Connecting stuff upppp!
+		// Parameters
+		osc.frequency.set(C7_FREQ);
+		osc.amplitude.set(0.5);
 		osc.output.connect(flp);
 		flp.output.connect(lo);
 		
@@ -73,26 +65,16 @@ public class SoundGenerator implements LeapParameterListener {
 			receivingParameters = true;
 			onFirstLeapParameters(newParameters);
 		} else {
-			double freqRatio = leapNormalizeY(newParameters.handPosition.getY());
+			double freqRatio = leapNormalize(newParameters.handPosition.getY());
 			freqRatio = freqRatio > 1 ? 1 : freqRatio;
-			osc.amplitude.set(freqRatio);
+			osc.frequency.set(C7_FREQ*freqRatio);
 			
-			double cutRatio = 1 - leapNormalizeZ(newParameters.handPosition.getZ());
-//			System.out.println(cutRatio);
-			flp.frequency.set(HUMAN_HIGH * cutRatio);
+			double cutRatio = leapNormalize(newParameters.handPosition.getZ());
 		}
 	}
-
-	public double leapNormalizeX(double coord) {
-		return Math.min(Math.abs(coord)/LEAP_X_RANGE, 1);
-	}
 	
-	public double leapNormalizeY(double coord) {
-		return Math.min(Math.abs(coord)/LEAP_Y_RANGE, 1);
-	}
-	
-	public double leapNormalizeZ(double coord) {
-		return Math.min(Math.abs(coord)/LEAP_Z_RANGE, 1);
+	public double leapNormalize(double coord) {
+		return Math.min(Math.abs(coord)/650.0, 1);
 	}
 
 	@Override
