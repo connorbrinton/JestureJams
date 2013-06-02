@@ -21,6 +21,7 @@ public class SoundGenerator implements LeapParameterListener {
 	private static final double LEAP_Y_RANGE = 650.0;
 	private static final double LEAP_Z_RANGE = 250.0;
 	private static final double LEAP_VEL_RANGE = 1000.0;
+	private static final double LEAP_PITCH_THRESH = -0.8;
 	private static final double HUMAN_LOW = 20.0;
 	private static final double HUMAN_HIGH = 20000.0;
 	private static final double C4_FREQ = getFrequency("C4");
@@ -117,6 +118,13 @@ public class SoundGenerator implements LeapParameterListener {
 		ampRatio = 0.4*leapNormalizeX(newParameters.handPosition2.getX()) + 0.25;
 		ampRatio = ampRatio > 1 ? 1 : ampRatio;
 		oscRight.amplitude.set(ampRatio);
+		
+		if (newParameters.handPosition1.pitch() > LEAP_PITCH_THRESH) {
+			oscRight.amplitude.set(0);
+		}
+		if (newParameters.handPosition2.pitch() > LEAP_PITCH_THRESH) {
+			oscLeft.amplitude.set(0);
+		}
 
 		double cutRatio = 0.5 - 0.5*leapNormalizeZ(newParameters.handPosition1.getZ());
 		// System.out.println(cutRatio);
