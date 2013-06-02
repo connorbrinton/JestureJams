@@ -23,6 +23,35 @@ public class SoundGenerator implements LeapParameterListener {
 	private static final double HUMAN_LOW = 20.0;
 	private static final double HUMAN_HIGH = 20000.0;
 	private static final double C4_FREQ = getFrequency("C4");
+	private static final double[] FREQS = new double[] {
+		getFrequency("C4"),
+		(getFrequency("C4") + getFrequency("D4"))/2,
+		getFrequency("D4"),
+		(getFrequency("E4") + getFrequency("D4"))/2,
+		getFrequency("E4"),
+		(getFrequency("E4") + getFrequency("F4"))/2,
+		getFrequency("F4"),
+		(getFrequency("F4") + getFrequency("G4"))/2,
+		getFrequency("G4"),
+		(getFrequency("G4") + getFrequency("A4"))/2,
+		getFrequency("A4"),
+		(getFrequency("A4") + getFrequency("B4"))/2,
+		getFrequency("B4"),
+		(getFrequency("B4") + getFrequency("C5"))/2,
+		getFrequency("C5"),
+		(getFrequency("C5") + getFrequency("D5"))/2,
+		getFrequency("D5"),
+		(getFrequency("E5") + getFrequency("D5"))/2,
+		getFrequency("E5"),
+		(getFrequency("E5") + getFrequency("F5"))/2,
+		getFrequency("F5"),
+		(getFrequency("F5") + getFrequency("G5"))/2,
+		getFrequency("G5"),
+		(getFrequency("G5") + getFrequency("A5"))/2,
+		getFrequency("A5"),
+		(getFrequency("A5") + getFrequency("B5"))/2,
+		getFrequency("B5"),
+	};
 
 	Synthesizer synth;
 	boolean receivingParameters = false;
@@ -70,15 +99,17 @@ public class SoundGenerator implements LeapParameterListener {
 
 	@Override
 	public void onLeapParametersChanged(LeapParameters newParameters) {
-		double ampRatio = 0.5*leapNormalizeY(newParameters.handPosition.getY());
+/*		double ampRatio = 0.5*leapNormalizeY(newParameters.handPosition.getY());
 		ampRatio = ampRatio > 1 ? 1 : ampRatio;
-		osc.amplitude.set(ampRatio);
+		osc.amplitude.set(ampRatio);*/
 
-		double cutRatio = 0.5 - 0.5*leapNormalizeVel(newParameters.handVelocity.magnitude());
+		double cutRatio = 0.5 - 0.5*leapNormalizeZ(newParameters.handPosition.getZ());
 		// System.out.println(cutRatio);
-		flp.frequency.set(HUMAN_HIGH * cutRatio);
+		flp.frequency.set(HUMAN_HIGH/2 * cutRatio);
 		
-		
+		double freqFrac = leapNormalizeY(newParameters.handPosition.getY());
+		double freq = FREQS[(int) (freqFrac*FREQS.length)];
+		osc.frequency.set(freq);
 	}
 
 	public double leapNormalizeX(double coord) {
