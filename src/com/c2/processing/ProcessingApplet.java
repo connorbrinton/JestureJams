@@ -112,6 +112,8 @@ public class ProcessingApplet extends PApplet implements LeapParameterListener {
 		float x;
 		float y;
 		int c;
+		
+		
 		float speed = 2;
 
 		Particle(int x, int y, int c) {
@@ -249,8 +251,8 @@ public class ProcessingApplet extends PApplet implements LeapParameterListener {
 
 	@Override
 	public void onLeapParametersChanged(LeapParameters newParameters) {
-		varX = leapNormalizeX(newParameters.handPosition1.getX());
-		System.out.println(varX);
+		varX = Math.max(leapNormalizeX(newParameters.handPosition1.getX()), leapNormalizeX(newParameters.handPosition2.getX()) );
+//		System.out.println(varX);
 	}
 
 	public double leapNormalizeX(double coord) {

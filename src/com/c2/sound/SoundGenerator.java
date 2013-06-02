@@ -81,7 +81,7 @@ public class SoundGenerator implements LeapParameterListener {
 		// Sawtooth
 		oscRight = new SawtoothOscillator();
 		synth.add(oscRight);
-		oscRight.frequency.set(C4_FREQ);
+		oscRight.frequency.set(getFrequency("C5"));
 		oscRight.amplitude.set(0.5);
 
 		// Filter
@@ -111,10 +111,10 @@ public class SoundGenerator implements LeapParameterListener {
 
 	@Override
 	public void onLeapParametersChanged(LeapParameters newParameters) {
-		double ampRatio = 0.5*leapNormalizeX(newParameters.handPosition1.getX());
+		double ampRatio = 0.4*leapNormalizeX(newParameters.handPosition1.getX()) + 0.25;
 		ampRatio = ampRatio > 1 ? 1 : ampRatio;
 		oscLeft.amplitude.set(ampRatio);
-		ampRatio = 0.5*leapNormalizeX(newParameters.handPosition2.getX());
+		ampRatio = 0.4*leapNormalizeX(newParameters.handPosition2.getX()) + 0.25;
 		ampRatio = ampRatio > 1 ? 1 : ampRatio;
 		oscRight.amplitude.set(ampRatio);
 
@@ -122,7 +122,7 @@ public class SoundGenerator implements LeapParameterListener {
 		// System.out.println(cutRatio);
 		flp.frequency.set(HUMAN_HIGH/2 * cutRatio);
 
-		double freqFrac = leapNormalizeY(newParameters.handPosition2.getY());
+		double freqFrac = leapNormalizeY(newParameters.handPosition1.getY());
 		double freq = FREQS[(int) (freqFrac*(FREQS.length - 1))];
 		oscLeft.frequency.set(freq);
 		
