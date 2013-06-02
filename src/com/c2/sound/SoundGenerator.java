@@ -15,14 +15,18 @@ import com.jsyn.unitgen.UnitOscillator;
 import com.leapmotion.leap.Vector;
 
 public class SoundGenerator implements LeapParameterListener {
-	
+
+	private static final double LEAP_X_RANGE = 300.0;
+	private static final double LEAP_Y_RANGE = 650.0;
+	private static final double LEAP_Z_RANGE = 250.0;
+
 	private static final double HUMAN_LOW = 20.0;
 	private static final double HUMAN_HIGH = 20000.0;
-	private static final double C7_FREQ = getFrequency("C7");
+	private static final double C5_FREQ = getFrequency("C7");
 
 	Synthesizer synth;
 	boolean receivingParameters = false;
-	
+
 	UnitOscillator osc;
 	FilterLowPass flp;
 
@@ -32,7 +36,7 @@ public class SoundGenerator implements LeapParameterListener {
 		// Set up the graph
 		setUpGraph(synth);
 	}
-	
+
 	public void setUpGraph(Synthesizer synth) {
 		// Graph terminal
 		LineOut lo = new LineOut();
@@ -41,46 +45,56 @@ public class SoundGenerator implements LeapParameterListener {
 		// Sawtooth
 		osc = new SawtoothOscillator();
 		synth.add(osc);
+		osc.frequency.set(C5_FREQ);
+		osc.amplitude.set(0.5);
+
+		// Filter
 		flp = new FilterLowPass();
 		synth.add(flp);
-		// Parameters
-		osc.frequency.set(C7_FREQ);
-		osc.amplitude.set(0.5);
+		flp.frequency.set(C5_FREQ);
+
+		// Connecting stuff upppp!
 		osc.output.connect(flp);
 		flp.output.connect(lo);
-		
+
 		lo.start();
 	}
-	
+
 	public static double getFrequency(String note) {
-		return Note.getFrequencyForNote(MusicStringParser.getNote(note).getValue());
+		return Note.getFrequencyForNote(MusicStringParser.getNote(note)
+				.getValue());
 	}
-	
+
 	public void onFirstLeapParameters(LeapParameters newParameters) {
 	}
 
 	@Override
 	public void onLeapParametersChanged(LeapParameters newParameters) {
-		if (!receivingParameters) {
-			receivingParameters = true;
-			onFirstLeapParameters(newParameters);
-		} else {
-			double freqRatio = leapNormalize(newParameters.handPosition.getY());
-			freqRatio = freqRatio > 1 ? 1 : freqRatio;
-			osc.frequency.set(C7_FREQ*freqRatio);
-			
-			double cutRatio = leapNormalize(newParameters.handPosition.getZ());
-		}
+		double freqRatio = 0.5*leapNormalizeY(newParameters.handPosition.getY());
+		freqRatio = freqRatio > 1 ? 1 : freqRatio;
+		osc.amplitude.set(freqRatio);
+
+		double cutRatio = 0.5 - 0.5*leapNormalizeZ(newParameters.handPosition.getZ());
+		// System.out.println(cutRatio);
+		flp.frequency.set(HUMAN_HIGH * cutRatio);
 	}
-	
-	public double leapNormalize(double coord) {
-		return Math.min(Math.abs(coord)/650.0, 1);
+
+	public double leapNormalizeX(double coord) {
+		return Math.min(Math.abs(coord) / LEAP_X_RANGE, 1);
+	}
+
+	public double leapNormalizeY(double coord) {
+		return Math.min(Math.abs(coord) / LEAP_Y_RANGE, 1);
+	}
+
+	public double leapNormalizeZ(double coord) {
+		return Math.min(Math.abs(coord) / LEAP_Z_RANGE, 1);
 	}
 
 	@Override
-	public void onNewGesture(GestureType gt , Vector position) {
+	public void onNewGesture(GestureType gt, Vector position) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }
