@@ -22,7 +22,7 @@ public class SoundGenerator implements LeapParameterListener {
 	private static final double LEAP_VEL_RANGE = 1000.0;
 	private static final double HUMAN_LOW = 20.0;
 	private static final double HUMAN_HIGH = 20000.0;
-	private static final double C5_FREQ = getFrequency("C5");
+	private static final double C4_FREQ = getFrequency("C4");
 
 	Synthesizer synth;
 	boolean receivingParameters = false;
@@ -45,13 +45,13 @@ public class SoundGenerator implements LeapParameterListener {
 		// Sawtooth
 		osc = new SawtoothOscillator();
 		synth.add(osc);
-		osc.frequency.set(C5_FREQ);
+		osc.frequency.set(C4_FREQ);
 		osc.amplitude.set(0.5);
 
 		// Filter
 		flp = new FilterLowPass();
 		synth.add(flp);
-		flp.frequency.set(C5_FREQ);
+		flp.frequency.set(C4_FREQ);
 
 		// Connecting stuff upppp!
 		osc.output.connect(flp);
@@ -77,6 +77,8 @@ public class SoundGenerator implements LeapParameterListener {
 		double cutRatio = 0.5 - 0.5*leapNormalizeVel(newParameters.handVelocity.magnitude());
 		// System.out.println(cutRatio);
 		flp.frequency.set(HUMAN_HIGH * cutRatio);
+		
+		
 	}
 
 	public double leapNormalizeX(double coord) {
