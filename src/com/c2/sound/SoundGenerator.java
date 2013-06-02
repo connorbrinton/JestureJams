@@ -103,11 +103,11 @@ public class SoundGenerator implements LeapParameterListener {
 		ampRatio = ampRatio > 1 ? 1 : ampRatio;
 		osc.amplitude.set(ampRatio);*/
 
-		double cutRatio = 0.5 - 0.5*leapNormalizeZ(newParameters.handPosition.getZ());
+		double cutRatio = 0.5 - 0.5*leapNormalizeZ(newParameters.handPosition1.getZ());
 		// System.out.println(cutRatio);
 		flp.frequency.set(HUMAN_HIGH/2 * cutRatio);
 		
-		double freqFrac = leapNormalizeY(newParameters.handPosition.getY());
+		double freqFrac = leapNormalizeY(newParameters.handPosition1.getY());
 		double freq = FREQS[(int) (freqFrac*(FREQS.length - 1))];
 		osc.frequency.set(freq);
 	}

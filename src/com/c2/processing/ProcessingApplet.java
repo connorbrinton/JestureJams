@@ -249,7 +249,7 @@ public class ProcessingApplet extends PApplet implements LeapParameterListener {
 
 	@Override
 	public void onLeapParametersChanged(LeapParameters newParameters) {
-		varX = leapNormalizeX(newParameters.handPosition.getX());
+		varX = leapNormalizeX(newParameters.handPosition1.getX());
 		System.out.println(varX);
 	}
 
