@@ -8,6 +8,7 @@ import com.c2.leap.LeapParameterListener;
 import com.c2.leap.LeapParameters;
 import com.jsyn.JSyn;
 import com.jsyn.Synthesizer;
+import com.jsyn.unitgen.Add;
 import com.jsyn.unitgen.FilterLowPass;
 import com.jsyn.unitgen.LineOut;
 import com.jsyn.unitgen.SawtoothOscillator;
@@ -87,10 +88,14 @@ public class SoundGenerator implements LeapParameterListener {
 		flp = new FilterLowPass();
 		synth.add(flp);
 		flp.frequency.set(C4_FREQ);
+		
+		// Add
+		Add add = new Add();
 
 		// Connecting stuff upppp!
-		oscLeft.output.connect(flp);
-		oscRight.output.connect(flp);
+		oscLeft.output.connect(add.inputA);
+		oscRight.output.connect(add.inputB);
+		add.output.connect(flp);
 		flp.output.connect(lo);
 
 		lo.start();
